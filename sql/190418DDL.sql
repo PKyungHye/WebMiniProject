@@ -1,0 +1,22 @@
+DROP TABLE user01 CASCADE CONSTRAINT;
+DROP TABLE post01 CASCADE CONSTRAINT;
+DROP SEQUENCE post01_postno_seq;
+
+CREATE TABLE user01 (
+    userid VARCHAR(20) PRIMARY KEY,
+    userpw VARCHAR(20) NOT NULL,
+    usernickname VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE post01 (
+    postno NUMBER(10) PRIMARY KEY,
+    userid VARCHAR(20) NOT NULL,
+    ptitle VARCHAR(30) NOT NULL,
+    pcontent VARCHAR(100) NOT NULL
+);
+
+CREATE SEQUENCE post01_postno_seq;
+
+ALTER TABLE post01 ADD FOREIGN KEY (userid) REFERENCES user01 (userid);
+
+COMMIT;
