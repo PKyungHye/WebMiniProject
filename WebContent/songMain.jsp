@@ -27,6 +27,8 @@ h2 {
 }
 .nav_container {
 	width: 100%;
+	position:absolute;
+	top: 70px;
 }
 .topnav {
 	width: 97%;
