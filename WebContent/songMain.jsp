@@ -52,20 +52,17 @@ h2 {
 			</div>
 			<div style='float:right;'>
 				<%//미로그인 상태일 때
-				if (session.getAttribute("id") == null) {
+				if (session.getAttribute("userid") == null) {
 				%>
-					<form action="#" method="post">
-						ID <input type='text' name='id' placeholder='ID' size='5' required>	
-						PW <input type='password' name='pw' placeholder='Password' size='5' required>	
-						<button type='submit' name='submit' value='로그인'>로그인</button>
-					</form>
+					<a href='songLogin.html' target='main_frame'><button>로그인</button></a>
+					<a href='signupForm.html' target='main_frame'><button>회원가입</button></a>
 				<% //로그인 상태일 때
 				} else {
 				%>
 					<form action="#" method="post">
 						${sessionScope.id} 님	
 						<button type='submit' name='submit' value='로그아웃'>로그아웃</button>	
-						<a href='#' target='frame1'><button type='button'>마이페이지</button></a>
+						<a href='#' target='main_frame'><button type='button'>마이페이지</button></a>
 					</form>
 				<% } %>
 			</div>

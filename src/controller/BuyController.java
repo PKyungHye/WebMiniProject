@@ -1,4 +1,4 @@
-package songCont;
+package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-@WebServlet("/songcon")
-public class SongController extends HttpServlet {
+@WebServlet("/buycon")
+public class BuyController extends HttpServlet {
 	
 	public static String [] priceToInteger(String strPrice, String [] arr) {
 		//크롤링한 가격이 "000" 형태일 경우

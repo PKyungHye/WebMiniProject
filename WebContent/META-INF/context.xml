@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+1. Context: DB 접속의 설정 정보를 저장하는 tomcat 서버의 설정파일
+2. 반드시 메뉴얼에 맞게 개발
+	- https://tomcat.apache.org/tomcat-8.5-doc/jndi-datasource-examples-howto.html#Oracle_8i,_9i_&_10g
+		에서 복붙해오기
+3. db가 하나 이상일 경우 고려사항
+	- 각 db 설정의 구분 필요 -> 따라서 별칭 부여하여 사용
+ -->
+<Context>
+<Resource name="jdbc/myoracle" auth="Container"
+              type="javax.sql.DataSource" driverClassName="oracle.jdbc.OracleDriver"
+              url="jdbc:oracle:thin:@127.0.0.1:1521:orcl"
+              username="scott" password="tiger" maxTotal="20" maxIdle="10"
+              maxWaitMillis="-1"/>
+</Context>
