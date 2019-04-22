@@ -148,7 +148,7 @@ public class BuyController extends HttpServlet {
 		}
 		
 		request.setAttribute("allData", allData);
-		request.getRequestDispatcher("buy/buyData.jsp").forward(request, response);
+		request.getRequestDispatcher("buyData.jsp").forward(request, response);
 	}
 
 }

@@ -9,8 +9,8 @@ import model.domain.UserDTO;
 import util.DBUtil;
 
 public class UserDAO {
-	//유저 로그인(검색)
-	public static UserDTO getUser(String userid) throws SQLException{
+	//유저 로그인
+	public static int login(String userid, String userpw) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -18,15 +18,40 @@ public class UserDAO {
 		
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from user01 where userid=?");
+			pstmt = con.prepareStatement("SELECT userpw FROM user01 WHERE userid = ?");
 			pstmt.setString(1, userid);
 			rset = pstmt.executeQuery();
 			if(rset.next()){
-				user = new UserDTO(rset.getString(1), rset.getString(2), rset.getString(3));
+				if (rset.getString(1).equals(userpw)) {
+					return 1;
+				} else {
+					return 2;
+				}
+			} else {
+				return 3;
 			}
+		} catch (Exception e) {
+			return 0;
 		} finally {
 			DBUtil.close(con, pstmt, rset);
 		}
-		return user;
+	}
+	
+	//유저 회원가입
+	public static int join(UserDTO user) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("INSERT INTO user01 VALUES(?, ?, ?)");
+			pstmt.setString(1, user.getUserid());
+			pstmt.setString(2, user.getUserpw());
+			pstmt.setString(3, user.getUsernickname());
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			return 0;
+		} finally {
+			DBUtil.close(con, pstmt);
+		}
 	}
 }
