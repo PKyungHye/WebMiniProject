@@ -3,8 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <title>Post Main</title>
+<style>
+a:link {
+	text-decoration: none;
+	color: black;
+}
+a:visited {
+	color: black;
+}
+a:hover, a:active {
+	color: gray;
+}
+.container {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	height: 100%;
+}
+.frame_container {
+	float: left;
+	height: 100%;
+	width: 80%;
+}
+</style>
 </head>
 <body>
+	<div class="container">
 	<h3>게시판</h3>
+		<div style="width: 20%; float: left;">
+			<h5>메뉴</h5>
+			<a href='postReco.jsp' target='post_frame'>노래 추천</a>
+		</div>
+		<div class="frame_container" align="center">
+			<iframe height="100%" width="100%" src="../dummy.html" name="post_frame" style="border:none;"></iframe>
+		</div>
+	</div>
 </body>
 </html>

@@ -1,3 +1,4 @@
+<%@page import="model.domain.UserDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -52,17 +53,17 @@ h2 {
 			</div>
 			<div style='float:right;'>
 				<%//미로그인 상태일 때
-				if (session.getAttribute("userid") == null) {
+				if (session.getAttribute("userInfo") == null) {
 				%>
 					<a href='songLogin.html' target='main_frame'><button>로그인</button></a>
 					<a href='signupForm.html' target='main_frame'><button>회원가입</button></a>
 				<% //로그인 상태일 때
 				} else {
 				%>
-					<form action="#" method="post">
-						${sessionScope.id} 님	
-						<button type='submit' name='submit' value='로그아웃'>로그아웃</button>	
-						<a href='#' target='main_frame'><button type='button'>마이페이지</button></a>
+					<form action="songcon" method="post">
+						<input type="hidden" name="command" value="logout">
+						${sessionScope.userInfo.usernickname} (${sessionScope.userInfo.userid}) 님	
+						<button type='submit' name='submit'>로그아웃</button>
 					</form>
 				<% } %>
 			</div>
@@ -71,5 +72,14 @@ h2 {
 	<div class="frame_container" align="center">
 		<iframe height="100%" width="97%" src="dummy.html" name="main_frame" style="border:none;"></iframe>
 	</div>
+	<script type="text/javascript">
+		<%
+		if (session.getAttribute("errMsg") != null) {
+		%>
+			alert(1);
+		<%	
+		}
+		%>
+	</script>
 </body>
 </html>
