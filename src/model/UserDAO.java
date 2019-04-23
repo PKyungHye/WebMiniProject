@@ -3,7 +3,6 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import model.domain.UserDTO;
 import util.DBUtil;
@@ -14,8 +13,6 @@ public class UserDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-		UserDTO user = null;
-		
 		try{
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("SELECT userpw FROM user01 WHERE userid = ?");
@@ -52,6 +49,28 @@ public class UserDAO {
 			return 0;
 		} finally {
 			DBUtil.close(con, pstmt);
+		}
+	}
+	
+	//유저 닉네임 검색
+	public static String getNickname(String userid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("SELECT usernickname FROM user01 WHERE userid = ?");
+			pstmt.setString(1, userid);
+			rset = pstmt.executeQuery();
+			if (rset.next()) {
+				return rset.getString(1);
+			} else {
+				return "null";
+			}
+		} catch (Exception e) {
+			return "오류";
+		} finally {
+			DBUtil.close(con, pstmt, rset);
 		}
 	}
 }

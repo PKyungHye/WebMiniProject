@@ -4,6 +4,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="model.domain.PostDTO"%>
 <%@ page import="model.PostDAO"%>
+<%@ page import="model.UserDAO"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,12 +35,13 @@
 
 			<ul class="nav navbar-nav">
 				<li><a href="buyMain.jsp">이용권 비교</a></li>
-				<li><a href="bbs.jsp">게시판</a></li>
+				<li><a href="post.jsp">게시판</a></li>
 			</ul>
 			
 			<ul class="nav navbar-nav navbar-right">
 			<%
-				if (session.getAttribute("userid") == null) {
+				String userid = (String) session.getAttribute("userid");
+				if (userid == null) {
 			%>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -67,52 +69,122 @@
 		</div>
 	</nav>
 
+	<%
+		int pageNum = 1; //기본 페이지 넘버
+
+		//페이지넘버값이 있을때
+		if (request.getParameter("pageNum") != null) {
+			pageNum = Integer.parseInt(request.getParameter("pageNum"));
+		}
+	%>
 	<!-- 게시판 -->
 	<div class="container">
 		<div class="row">
 			<table class="table table-striped"
 				style="text-align: center; border: 1px solid #dddddd">
-				<!-- <thead>
-					<tr>
-						<th style="background-color: #eeeeee; text-align: center;">번호</th>
-						<th style="background-color: #eeeeee; text-align: center;">제목</th>
-						<th style="background-color: #eeeeee; text-align: center;">작성자</th>
-						<th style="background-color: #eeeeee; text-align: center;">작성일</th>
-					</tr>
-				</thead> -->
 				<tbody>
 					<%
-						ArrayList<PostDTO> list = PostDAO.getList();
+						ArrayList<PostDTO> list = PostDAO.getList(pageNum);
 						for (int i = 0; i < list.size(); i++) {
+							PostDTO p = list.get(i);
+							String star = "";
+							for (int j = 0; j < p.getUserid().length()-3; j++) {
+								star += "*";
+							}
 					%>
 					<tr>
-						<td><%=list.get(i).getPostno()%></td>
-						<td><strong><%=list.get(i).getPtitle()%></strong></td>
-						<td><%=list.get(i).getUserid()%></td>
-						<td><%=list.get(i).getPostdate().substring(0, 11) + list.get(i).getPostdate().substring(11, 13)
-							+ " : " + list.get(i).getPostdate().substring(14, 16)%></td>
+						<td><%=p.getPostno()%></td>
+						<td><strong><%=p.getPtitle()%></strong></td>
+						<td><%=UserDAO.getNickname(p.getUserid()) + " (" + p.getUserid().substring(0, 3) + star + ")"%></td>
+						<td><%=p.getPostdate().substring(0, 11) + p.getPostdate().substring(11, 13)
+							+ " : " + p.getPostdate().substring(14, 16)%></td>
+						<%
+							//글작성자 본인일시 수정 삭제 가능 
+							if ( userid != null && userid.equals(p.getUserid()) ) {
+						%>
+						<td>
+							<a href="postUpdate.jsp?postno=<%=p.getPostno()%>">수정</a>
+							<a href="postDeleteAction.jsp?postno=<%=p.getPostno()%>">삭제</a>
+						</td>
+						<%
+							} else {
+						%>
+							<td>
+							</td>
+						<%
+							}
+						%>
 					</tr>
 					<tr>
-						<td colspan = "4"><%=list.get(i).getPcontent()%></td>
+						<td colspan = "5">
+						<%=list.get(i).getPcontent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>")%>
+						</td>
 					</tr>
 					<%
 						}
 					%>
 				</tbody>
 			</table>
-
+			
+			<div>
+			<!-- 페이지 넘기기 -->
+				<ul class="nav navbar-nav">
+				<%
+					int startNum = 1;
+					int lastNum = pageNum;
+					
+					
+					if (PostDAO.nextPage(pageNum+1)) {
+						lastNum = pageNum + 2;
+					} else if (PostDAO.nextPage(pageNum))  {
+						lastNum = pageNum + 1;
+					}
+					
+					if (pageNum >= 3) {
+						startNum = pageNum - 2;
+					} else {
+						if (lastNum >= 5) {
+							lastNum = pageNum + (5 - pageNum);
+						}
+					}
+					
+					if (pageNum != 1) {
+				%>
+						<li><a href="post.jsp?pageNum=<%=pageNum - 1%>">이전</a></li>
+				<%
+					}
+					for (int i = startNum; i <= lastNum; i++) {
+						if (i == pageNum) {
+				%>
+								<li><a href="post.jsp?pageNum=<%=i%>"><strong style="text-decoration: underline;"><%=i%></strong></a></li>
+				<%
+						} else {
+				%>
+							<li><a href="post.jsp?pageNum=<%=i%>"><%=i%></a></li>
+				<%
+						}
+					}
+					if (PostDAO.nextPage(pageNum)) {
+				%>
+						<li><a href="post.jsp?pageNum=<%=pageNum + 1%>">다음</a></li>
+				<%
+					}
+				%>
+				</ul>
+			</div>
+				
 			<!-- 회원만넘어가도록 -->
 			<%
 				//if logined userID라는 변수에 해당 아이디가 담기고 if not null
 				if (session.getAttribute("userid") != null) {
 			%>
-					<a href="postWrite.jsp" class="btn btn-primary pull-right">글쓰기</a>
+			<a href="postWrite.jsp" class="btn btn-primary pull-right">글쓰기</a>
 			<%
 				} else {
 			%>
-					<button class="btn btn-primary pull-right"
-						onclick="if(confirm('로그인 하세요'))location.href='login.jsp';"
-						type="button">글쓰기</button>
+			<button class="btn btn-primary pull-right"
+				onclick="if(confirm('로그인 하세요'))location.href='login.jsp';"
+				type="button">글쓰기</button>
 			<%
 				}
 			%>
