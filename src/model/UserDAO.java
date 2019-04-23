@@ -35,15 +35,15 @@ public class UserDAO {
 	}
 	
 	//유저 회원가입
-	public static int join(UserDTO user) {
+	public static int join(String userid, String userpw, String usernickname) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("INSERT INTO user01 VALUES(?, ?, ?)");
-			pstmt.setString(1, user.getUserid());
-			pstmt.setString(2, user.getUserpw());
-			pstmt.setString(3, user.getUsernickname());
+			pstmt.setString(1, userid);
+			pstmt.setString(2, userpw);
+			pstmt.setString(3, usernickname);
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			return 0;

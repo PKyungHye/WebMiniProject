@@ -71,7 +71,7 @@ table, th, td {
 						aria-expanded="false">${sessionScope.userid} 님<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li class="active"><a href="main.jsp">마이페이지</a></li>
-							<li><a href="logoutAction.jsp">로그아웃</a></li>
+							<li><a href="maincon?command=logout">로그아웃</a></li>
 						</ul>
 					</li>
 			<%
@@ -86,21 +86,28 @@ table, th, td {
 
 	<!-- 부트스트랩 JS  -->
 	<script src="js/bootstrap.js"></script>
-	
-	
-	<h4>이용권 비교</h4>
-	<div class="jumbotron" style="padding-top: 20px;">
-		사이트: 
-		<input type="checkbox" id="checkAll" onclick="checkAll()">전체
-		<input type="checkbox" name="sites" id="genie" onclick="offCheckAll()">지니
-		<input type="checkbox" name="sites" id="bugs" onclick="offCheckAll()">벅스
-		<input type="checkbox" name="sites" id="melon" onclick="offCheckAll()">멜론<br>
-		
-		가격: 
-		<input name="price" type="number" size="3" min="0" step="500" max="49500" value="0" required>원 이상 ~ 
-		<input name="price" type="number" size="3" min="500" step="500" max="50000" value="50000" required>원 이하<br>
-		
-		<button onclick="loadDoc()">검색</button>
+
+	<div class="container">
+		<div class="col-lg-4"></div>
+
+		<div class="col-lg-4">
+			<div class="jumbotron" style="padding-top: 20px;">
+				<h4 style="text-align: center;">이용권 비교</h4>
+				사이트: 
+				<input type="checkbox" id="checkAll" onclick="checkAll()" style="padding: 6px 12px;">전체
+				<input type="checkbox" name="sites" id="genie" onclick="offCheckAll()" style="padding: 6px 12px;">지니
+				<input type="checkbox" name="sites" id="bugs" onclick="offCheckAll()" style="padding: 6px 12px;">벅스
+				<input type="checkbox" name="sites" id="melon" onclick="offCheckAll()" style="padding: 6px 12px;">멜론
+				<br><br>
+				
+				가격: 
+				<input name="price" type="number" size="3" min="0" step="500" max="49500" value="0" style="padding: 6px 12px;" required>원 이상 ~ 
+				<input name="price" type="number" size="3" min="500" step="500" max="50000" value="50000" style="padding: 6px 12px;" required>원 이하
+				<br><br><br><br>
+				
+				<button onclick="loadDoc()" class="btn btn-primary form-control">검색</button>
+			</div>
+		</div>
 	</div>
 	
 	<div class="table_container" id="viewGenie" style="display: none;">

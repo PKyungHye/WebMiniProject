@@ -56,7 +56,7 @@
 						aria-expanded="false">${sessionScope.userid} 님<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li class="active"><a href="main.jsp">마이페이지</a></li>
-							<li><a href="logoutAction.jsp">로그아웃</a></li>
+							<li><a href="maincon?command=logout">로그아웃</a></li>
 						</ul>
 					</li>
 			<%
@@ -66,7 +66,6 @@
 		</div>
 	</nav>
 
-	
 
 	<!-- 애니매이션 담당 JQUERY -->
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>

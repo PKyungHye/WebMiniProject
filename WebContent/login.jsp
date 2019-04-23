@@ -25,7 +25,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="main.jsps">메인으로</a>
+			<a class="navbar-brand" href="main.jsp">메인으로</a>
 		</div>
 
 		<div class="collapse navbar-collapse"
@@ -57,21 +57,23 @@
 			<div class="jumbotron" style="padding-top: 20px;">
 			
 				<!-- 로그인 정보를 숨기면서 전송post -->
-				<form method="post" action="loginAction.jsp">
+				<form method="post" action="maincon">
+					<input type="hidden" name="command" value="login">
 					<h3 style="text-align: center;">로그인화면</h3>
 
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="아이디"
-							name="userid" maxlength="20">
+							name="userid" maxlength="20" required>
 					</div>
 					
 					<div class="form-group">
 						<input type="password" class="form-control" placeholder="비밀번호"
-							name="userpw" maxlength="20">
+							name="userpw" maxlength="20" required>
 					</div>
 					
 					<input type="submit" class="btn btn-primary form-control"
 						value="로그인">
+					<div style="text-align: center; padding: 6px 12px;" ><a onclick="window.history.back();">취소</a></div>
 				</form>
 			</div>
 		</div>

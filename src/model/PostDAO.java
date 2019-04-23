@@ -59,12 +59,9 @@ public class PostDAO {
 		ArrayList<PostDTO> postList = new ArrayList<PostDTO>();
 		try{
 			con = DBUtil.getConnection();
-			System.out.println("---getList---");
-			System.out.println(pageNum*10 + ", " + (pageNum -1)*10);
-			//pstmt = con.prepareStatement("SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) INTERSECT (SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) ORDER BY postno DESC");
-			pstmt = con.prepareStatement("SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE postno > ? AND postno <= ?");
-			pstmt.setInt(1, (getPostno() - (pageNum - 1)*10 - 10));
-			pstmt.setInt(2, (getPostno() - (pageNum - 1)*10));
+			pstmt = con.prepareStatement("SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) MINUS (SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) ORDER BY postno DESC");
+			pstmt.setInt(1, pageNum*10);
+			pstmt.setInt(2, (pageNum - 1)*10);
 			rset = pstmt.executeQuery();
 			while (rset.next()) {
 				postList.add( new PostDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5)) );
@@ -85,12 +82,9 @@ public class PostDAO {
 		boolean result = false;
 		try {
 			con = DBUtil.getConnection();
-			System.out.println("---nextPage---");
-			System.out.println(pageNum);
-			System.out.println((getPostno() - (pageNum)*10 - 10) + ", " + (getPostno() - (pageNum)*10));
-			pstmt = con.prepareStatement("SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE postno > ? AND postno <= ?");
-			pstmt.setInt( 1, (getPostno() - (pageNum - 1)*10 - 21) );
-			pstmt.setInt( 2, (getPostno() - (pageNum - 1)*10 - 11) );
+			pstmt = con.prepareStatement("SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) MINUS (SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) ORDER BY postno DESC");
+			pstmt.setInt( 1, (pageNum + 1)*10);
+			pstmt.setInt( 2, (pageNum)*10);
 			rset = pstmt.executeQuery();
 			if (rset.next()) {
 				result = true;

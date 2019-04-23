@@ -59,7 +59,7 @@
 						aria-expanded="false">${sessionScope.userid} 님<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li class="active"><a href="main.jsp">마이페이지</a></li>
-							<li><a href="logoutAction.jsp">로그아웃</a></li>
+							<li><a href="maincon?command=logout">로그아웃</a></li>
 						</ul>
 					</li>
 			<%
@@ -103,8 +103,8 @@
 							if ( userid != null && userid.equals(p.getUserid()) ) {
 						%>
 						<td>
-							<a href="postUpdate.jsp?postno=<%=p.getPostno()%>">수정</a>
-							<a href="postDeleteAction.jsp?postno=<%=p.getPostno()%>">삭제</a>
+							<a onclick="if(confirm('수정할까요?'))location.href='postWrite.jsp?comm=update&postno=<%=p.getPostno()%>';">수정</a>
+							<a onclick="if(confirm('삭제할까요?'))location.href='maincon?command=postDelete&postno=<%=p.getPostno()%>';">삭제</a>
 						</td>
 						<%
 							} else {
@@ -117,9 +117,10 @@
 					</tr>
 					<tr>
 						<td colspan = "5">
+						<!-- <img src="https://www.w3schools.com/tags/smiley.gif" height="30" width="30">
+						<hr> -->
 						<%=list.get(i).getPcontent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>")%>
 						</td>
-					</tr>
 					<%
 						}
 					%>
@@ -156,7 +157,7 @@
 					for (int i = startNum; i <= lastNum; i++) {
 						if (i == pageNum) {
 				%>
-								<li><a href="post.jsp?pageNum=<%=i%>"><strong style="text-decoration: underline;"><%=i%></strong></a></li>
+								<li><a href="post.jsp?pageNum=<%=i%>"><strong style="text-decoration: underline;"><big><%=i%></big></strong></a></li>
 				<%
 						} else {
 				%>
@@ -178,13 +179,11 @@
 				//if logined userID라는 변수에 해당 아이디가 담기고 if not null
 				if (session.getAttribute("userid") != null) {
 			%>
-			<a href="postWrite.jsp" class="btn btn-primary pull-right">글쓰기</a>
+			<a href="postWrite.jsp?comm=write" class="btn btn-primary pull-right">글쓰기</a>
 			<%
 				} else {
 			%>
-			<button class="btn btn-primary pull-right"
-				onclick="if(confirm('로그인 하세요'))location.href='login.jsp';"
-				type="button">글쓰기</button>
+			<button class="btn btn-primary pull-right" onclick="if(confirm('로그인 하세요'))location.href='login.jsp';" type="button">글쓰기</button>
 			<%
 				}
 			%>
