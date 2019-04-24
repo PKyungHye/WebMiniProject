@@ -15,6 +15,12 @@
 <!-- 스타일시트 참조  -->
 <link rel="stylesheet" href="css/bootstrap.css">
 <title>jsp 게시판 웹사이트</title>
+<style type="text/css">
+table .songlist {
+    width: 100%;
+    text-align: left;
+}
+</style>
 </head>
 <body>
 	<!-- 네비게이션  -->
@@ -58,7 +64,7 @@
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">${sessionScope.userid} 님<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li class="active"><a href="main.jsp">마이페이지</a></li>
+							<li class="active"><a href="userMyPage.jsp">마이페이지</a></li>
 							<li><a href="maincon?command=logout">로그아웃</a></li>
 						</ul>
 					</li>
@@ -77,6 +83,7 @@
 			pageNum = Integer.parseInt(request.getParameter("pageNum"));
 		}
 	%>
+	
 	<!-- 게시판 -->
 	<div class="container">
 		<div class="row">
@@ -87,15 +94,21 @@
 						ArrayList<PostDTO> list = PostDAO.getList(pageNum);
 						for (int i = 0; i < list.size(); i++) {
 							PostDTO p = list.get(i);
+							
 							String star = "";
 							for (int j = 0; j < p.getUserid().length()-3; j++) {
 								star += "*";
+							}
+
+							String userInfo = UserDAO.getNickname(p.getUserid()) + " (" + p.getUserid().substring(0, 3) + star + ")";
+							if (UserDAO.getNickname(p.getUserid()).equals("null")) {
+								userInfo = "탈퇴한 회원";
 							}
 					%>
 					<tr>
 						<td><%=p.getPostno()%></td>
 						<td><strong><%=p.getPtitle()%></strong></td>
-						<td><%=UserDAO.getNickname(p.getUserid()) + " (" + p.getUserid().substring(0, 3) + star + ")"%></td>
+						<td><%=userInfo%></td>
 						<td><%=p.getPostdate().substring(0, 11) + p.getPostdate().substring(11, 13)
 							+ " : " + p.getPostdate().substring(14, 16)%></td>
 						<%
@@ -116,10 +129,20 @@
 						%>
 					</tr>
 					<tr>
-						<td colspan = "5">
-						<!-- <img src="https://www.w3schools.com/tags/smiley.gif" height="30" width="30">
-						<hr> -->
-						<%=list.get(i).getPcontent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>")%>
+						<td colspan = "5" align="center">
+							<div style="width: 70%; padding: 5px; padding-left: 20px; border-style: solid; border-color: #f1f1f1;">
+								<table class='songlist'>
+									<tr>
+										<td><img src="<%=p.getSurl()%>" height='30px' width='30px'></td>
+										<td width='33%'><strong><%=p.getStitle()%></strong></td>
+										<td width='30%'><%=p.getSartist()%></td>
+										<td width='30%'><%=p.getSalbum()%></td>
+									</tr>
+								</table>
+							</div>
+							<div style="padding: 10px;">
+								<%=p.getPcontent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>")%>
+							</div>
 						</td>
 					<%
 						}

@@ -13,29 +13,42 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-@WebServlet("/Search")
+@WebServlet("/search")
 public class Search extends HttpServlet {
+	private static ArrayList<String> getList(Elements e) {
+		ArrayList<String> list = new ArrayList<>();
+		for (Element v : e) {
+			list.add(v.text());
+		}
+		return list;
+	}
+	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-
-		JSONObject allData = new JSONObject();
+		//.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>")
+		String url = "https://music.bugs.co.kr/search/track?q=" + request.getParameter("searchWord");
+		Document search = Jsoup.connect(url).get();
+		ArrayList<String> titles = getList(search.select(".title[adult_yn]"));
+		ArrayList<JSONObject> songList = new ArrayList<>();
 		
-		//String url = "https://music.bugs.co.kr/search/track?q=" + request.getParameter("searchWord");
-		String url = "https://music.bugs.co.kr/search/track?q=" + "나만 봄";
-		
-		try {
-			Document search = Jsoup.connect(url).get();
-			Elements thumb = search.select("td>img");
-			System.out.println(thumb);
-			Elements title = search.select(".title");
-		} catch (Exception e) {
-			System.out.println("오류");
-			ArrayList<String> msg = new ArrayList<>();
-			msg.add("오류가 발생하였습니다.");
+		int lastNum = 10;
+		if (titles.size() < 10) {
+			lastNum = titles.size();
 		}
+		for (int i = 0; i < lastNum; i++) {
+			JSONObject songJSON = new JSONObject();
+			songJSON.put("thumbUrl", ( (ArrayList<String>)search.select(".thumbnail").select("img").eachAttr("src") ).get(i));
+			songJSON.put("title", titles.get(i));
+			songJSON.put("artist", ( (ArrayList<String>)search.select(".artist").select("a").eachAttr("title") ).get(i));
+			songJSON.put("album", getList(search.select(".left").select(".album")).get(i));
+			songList.add(songJSON);
+		}
+		
+		request.setAttribute("songData", songList);
+		request.getRequestDispatcher("searchData.jsp").forward(request, response);
 	}
-
 }

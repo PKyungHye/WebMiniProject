@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import model.PostDAO;
 import model.UserDAO;
 import model.domain.PostDTO;
+import model.domain.UserDTO;
 
 @WebServlet("/maincon")
 public class MainController extends HttpServlet {
@@ -23,6 +24,7 @@ public class MainController extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		
 		String command = request.getParameter("command");
+
 		if (command.equals("login")) {
 			login(request, response);
 		} else if (command.equals("join")) {
@@ -31,6 +33,10 @@ public class MainController extends HttpServlet {
 			session.invalidate();
 			session = null;
 			response.sendRedirect("main.jsp");
+		} else if (command.equals("userUpdate")) {
+			userUpdate(request, response);
+		} else if (command.equals("userDelete")) {
+			userDelete(request, response);
 		} else if (command.equals("postWrite")) {
 			postWrite(request, response);
 		} else if (command.equals("postUpdate")) {
@@ -42,6 +48,7 @@ public class MainController extends HttpServlet {
 		}
 	}
 	
+	//로그인
 	protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
@@ -58,7 +65,8 @@ public class MainController extends HttpServlet {
 			script.println("<script>alert(\"오류가 발생하였습니다.\");history.back();</script>");
 		}
 	}
-
+	
+	//회원가입
 	protected void join(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
@@ -72,10 +80,50 @@ public class MainController extends HttpServlet {
 		}
 	}
 	
-	protected void postWrite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	//정보 수정
+	protected void userUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		int result = PostDAO.write((String) session.getAttribute("userid"), request.getParameter("ptitle"), request.getParameter("pcontent"));
+		int result = UserDAO.userUpdate((String) session.getAttribute("userid"), request.getParameter("userpw"), request.getParameter("usernickname"));
+		PrintWriter script = response.getWriter();
+		if (result == 1) {
+			script.println("<script>location.href='userMyPage.jsp';</script>");
+		} else { // result == 0
+			script.println("<script>alert(\"수정에 실패하였습니다.\");history.back();</script>");
+		}
+	}
+	
+	//회원 탈퇴
+	protected void userDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		PrintWriter script = response.getWriter();
+		String userid = (String) session.getAttribute("userid");
+		int result2 = 0;
+		
+		if (PostDAO.getPost(userid) == null) {
+			result2 = 1;
+		} else {
+			result2 = PostDAO.update(userid, "탈퇴한 회원");
+		}
+		
+		if (result2 == 1) {
+			int result = UserDAO.userDelete(userid);
+			if (result == 1) {
+				session.invalidate();
+				session = null;
+				script.println("<script>alert(\"탈퇴하였습니다.\");location.href='main.jsp';</script>");
+			} else { // result == 0
+				script.println("<script>alert(\"탈퇴에 실패하였습니다.\");history.back();</script>");
+			}
+		} else {
+			script.println("<script>alert(\"탈퇴에 실패하였습니다.\");history.back();</script>");
+		}
+	}
+	
+	protected void postWrite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		int result = PostDAO.write((String) session.getAttribute("userid"), request.getParameter("ptitle"), request.getParameter("pcontent"),
+									request.getParameter("surl"), request.getParameter("stitle"), request.getParameter("sartist"), request.getParameter("salbum"));
 		if (result == 1) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
@@ -113,7 +161,8 @@ public class MainController extends HttpServlet {
 			script.println("location.href = 'post.jsp'");
 			script.println("</script>");
 		} else {
-			int result = PostDAO.update(postno, request.getParameter("ptitle"), request.getParameter("pcontent"));
+			int result = PostDAO.update(postno, request.getParameter("ptitle"), request.getParameter("pcontent"),
+										request.getParameter("surl"), request.getParameter("stitle"), request.getParameter("sartist"), request.getParameter("salbum"));
 			if (result == 1) {
 				PrintWriter script = response.getWriter();
 				script.println("<script>");

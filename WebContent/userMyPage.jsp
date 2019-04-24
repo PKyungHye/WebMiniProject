@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
+    pageEncoding="UTF-8"%>
+<%@ page import="model.domain.UserDTO"%>
+<%@ page import="model.UserDAO"%>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,9 +12,11 @@
 
 <!-- 스타일시트 참조  -->
 <link rel="stylesheet" href="css/bootstrap.min.css">
-<title>jsp 게시판 웹사이트</title>
+<link rel="stylesheet" href="css/bootstrap.css">
+<title>buy main</title>
+<style type="text/css">
+</style>
 </head>
-
 <body>
 	<!-- 네비게이션  -->
 	<nav class="navbar navbar-default">
@@ -56,7 +59,7 @@
 						aria-expanded="false">${sessionScope.userid} 님<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li class="active"><a href="userMyPage.jsp">마이페이지</a></li>
-							<li><a href="maincon?command=logout">로그아웃</a></li>
+							<li><a href="logoutAction.jsp">로그아웃</a></li>
 						</ul>
 					</li>
 			<%
@@ -66,15 +69,47 @@
 		</div>
 	</nav>
 
+	
+	<h4>마이페이지</h4>
+	<div class="container">
+		<div class="row">
+			<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
+				<thead>
+					<tr>
+						<th>아이디</th>
+						<th>비밀번호</th>
+						<th>닉네임</th>
+					</tr>
+				</thead>
+				<%
+					UserDTO user = UserDAO.getUser((String) session.getAttribute("userid"));
+				%>
+				<tbody>
+					<tr>
+						<td>${sessionScope.userid}</td>
+						<td><%=user.getUserpw()%></td>
+						<td><%=user.getUsernickname()%></td>
+					</tr>
+		
+					<tr>
+						<td colspan="4">
+							<a href="userUpdate.jsp">정보수정</a>&nbsp;&nbsp;&nbsp;
+							<a onclick="if(confirm('진짜 탈퇴하시겠습니까?'))location.href='maincon?command=userDelete&userid=${sessionScope.userid}';">회원탈퇴</a>&nbsp;&nbsp;&nbsp;
+							<a onclick="history.back()">취소</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	
+
+
 
 	<!-- 애니매이션 담당 JQUERY -->
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
 	<!-- 부트스트랩 JS  -->
 	<script src="js/bootstrap.js"></script>
-
-
-
 </body>
-
 </html>

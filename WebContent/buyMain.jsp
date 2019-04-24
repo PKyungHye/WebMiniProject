@@ -9,18 +9,15 @@
 <meta name="viewport" content="width=device-width" initial-scale="1">
 
 <!-- 스타일시트 참조  -->
+<link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <title>buy main</title>
 <style type="text/css">
-table {
-	border-collapse: collapse;
-}
 th {
 	width: 50%;
 }
-table, th, td {
-	border: 1px solid black;
-	text-align: center;
+td {
+	border-bottom: 1px solid #ddd;
 }
 .table_container {
 	width: 32%;
@@ -70,7 +67,7 @@ table, th, td {
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">${sessionScope.userid} 님<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li class="active"><a href="main.jsp">마이페이지</a></li>
+							<li class="active"><a href="userMyPage.jsp">마이페이지</a></li>
 							<li><a href="maincon?command=logout">로그아웃</a></li>
 						</ul>
 					</li>
@@ -110,44 +107,46 @@ table, th, td {
 		</div>
 	</div>
 	
-	<div class="table_container" id="viewGenie" style="display: none;">
-		<table align="center">
-			<caption>Genie</caption>
-			<tr><th>이용권</th><th>가격</th></tr>
-			<tbody id="dataGenie"></tbody>
-		</table>
-		<br>
-		<p align="center">
-			<a href="https://www.genie.co.kr/buy/thirtyDays" target="_blank">
-				<button>Genie</button>
-			</a>
-		</p>
-	</div>
-	<div class="table_container" id="viewBugs" style="display: none;">
-		<table align="center">
-			<caption>Bugs</caption>
-			<tr><th>이용권</th><th colspan="2">가격</th></tr>
-			<tbody id="dataBugs"></tbody>
-		</table>
-		<br>
-		<p align="center">
-			<a href="https://music.bugs.co.kr/pay/public" target="_blank">
-				<button>Bugs</button>
-			</a>
-		</p>
-	</div>
-	<div class="table_container" id="viewMelon" style="display: none;">
-		<table align="center">
-			<caption>Melon</caption>
-			<tr><th>이용권</th><th colspan="2">가격</th></tr>
-			<tbody id="dataMelon"></tbody>
-		</table>
-		<br>
-		<p align="center">
-			<a href="https://www.melon.com/buy/pamphlet/all.htm" target="_blank">
-				<button>Melon</button>
-			</a>
-		</p>
+	<div align="center">
+		<div class="table_container" id="viewGenie" style="display: none;">
+			<table class="table">
+				<caption>Genie</caption>
+				<tr><th>이용권</th><th>가격</th></tr>
+				<tbody id="dataGenie"></tbody>
+			</table>
+			<br>
+			<p align="center">
+				<a href="https://www.genie.co.kr/buy/thirtyDays" target="_blank">
+					Genie
+				</a>
+			</p>
+		</div>
+		<div class="table_container" id="viewBugs" style="display: none;">
+			<table class="table">
+				<caption>Bugs</caption>
+				<tr><th>이용권</th><th colspan="2">가격</th></tr>
+				<tbody id="dataBugs"></tbody>
+			</table>
+			<br>
+			<p align="center">
+				<a href="https://music.bugs.co.kr/pay/public" target="_blank">
+					Bugs
+				</a>
+			</p>
+		</div>
+		<div class="table_container" id="viewMelon" style="display: none;">
+			<table class="table">
+				<caption>Melon</caption>
+				<tr><th>이용권</th><th colspan="2">가격</th></tr>
+				<tbody id="dataMelon"></tbody>
+			</table>
+			<br>
+			<p align="center">
+				<a href="https://www.melon.com/buy/pamphlet/all.htm" target="_blank">
+					Melon
+				</a>
+			</p>
+		</div>
 	</div>
 	
 	<script type="text/javascript">

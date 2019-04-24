@@ -40,44 +40,43 @@ public class BuyController extends HttpServlet {
 		//이용권 이름, 가격이 담긴 JSON을 저장할 ArrayList
 		ArrayList<JSONObject> dataList = new ArrayList<>();
 		
-		for (int i = 0; i < info.toArray().length; i++) {
+		for (int i = 0; i < t.size(); i++) {
 			//결제 종류 정보, 가격 정보 저장할 ArrayList
-			ArrayList<String> typeAL = new ArrayList<>();
-			ArrayList<Integer> priceAL = new ArrayList<>();
-			ArrayList<JSONObject> infoAL = new ArrayList<>();
+			ArrayList<String> typeList = new ArrayList<>();
+			ArrayList<Integer> priceList = new ArrayList<>();
+			ArrayList<JSONObject> infoList = new ArrayList<>();
 			//JSON
-			JSONObject datas = new JSONObject();
+			JSONObject dataJSON = new JSONObject();
 			
 			//결제 종류 정보 typeAL에 저장
-			for (int j = 0; j < info.eq(i).select(tag1).toArray().length; j++) {
-				typeAL.add(info.eq(i).select(tag1).eq(j).text());
+			for (int j = 0; j < info.eq(i).select(tag1).size(); j++) {
+				typeList.add(info.eq(i).select(tag1).eq(j).text());
 			}
 			
 			//가격 정보 priceAL에 저장
-			for (int j = 0; j < info.eq(i).select(tag2).toArray().length; j++) {
+			for (int j = 0; j < info.eq(i).select(tag2).size(); j++) {
 				//가격 문자열 = 000원
-				String strPrice = info.eq(i).select(tag2).eq(j).text();
+				String priceStr = info.eq(i).select(tag2).eq(j).text();
 				//가격 문자열 split 후 저장할 array
 				String [] arr = new String [2];
 
 				//가격을 integer로 변환
-				arr = priceToInteger(strPrice, arr);
-				
-				priceAL.add(Integer.parseInt(arr[0] + arr[1]));
+				arr = priceToInteger(priceStr, arr);
+				priceList.add(Integer.parseInt(arr[0] + arr[1]));
 			}
 			
 			//결제 종류 정보, 가격 정보를 JSON 형태로 저장
-			for (int j = 0; j < priceAL.size(); j++) {
+			for (int j = 0; j < priceList.size(); j++) {
 				JSONObject infos = new JSONObject();
-				infos.put("type", typeAL.get(j));
-				infos.put("price", priceAL.get(j));
-				infoAL.add(infos);
+				infos.put("type", typeList.get(j));
+				infos.put("price", priceList.get(j));
+				infoList.add(infos);
 			}
 			
 			//이용권 이름과 prices를 JSON 형태로 저장
-			datas.put("title", t.eq(i).text());
-			datas.put("info", infoAL);
-			dataList.add(datas);
+			dataJSON.put("title", t.eq(i).text());
+			dataJSON.put("info", infoList);
+			dataList.add(dataJSON);
 		}
 		return dataList;
 	}
@@ -86,7 +85,7 @@ public class BuyController extends HttpServlet {
 		//이용권 이름, 가격이 담긴 JSON을 저장할 ArrayList
 		ArrayList<JSONObject> dataList = new ArrayList<>();
 
-		for (int i = 0; i <  price.toArray().length; i++) {
+		for (int i = 0; i < t.size(); i++) {
 			JSONObject datas = new JSONObject();
 			JSONObject infos = new JSONObject();
 			ArrayList<JSONObject> infoAL = new ArrayList<>();

@@ -11,15 +11,19 @@ import util.DBUtil;
 
 public class PostDAO {
 	//글쓰기
-	public static int write(String userid, String ptitle, String pcontent) {
+	public static int write(String userid, String ptitle, String pcontent, String surl, String stitle, String sartist, String salbum) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("INSERT INTO post01 VALUES(post01_postno_seq.NEXTVAL, sysdate, ?, ?, ?)");
+			pstmt = con.prepareStatement("INSERT INTO post01 VALUES(post01_postno_seq.NEXTVAL, sysdate, ?, ?, ?, ?, ?, ?, ?)");
 			pstmt.setString(1, userid);
 			pstmt.setString(2, ptitle);
 			pstmt.setString(3, pcontent);
+			pstmt.setString(4, surl);
+			pstmt.setString(5, stitle);
+			pstmt.setString(6, sartist);
+			pstmt.setString(7, salbum);
 			
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -59,12 +63,12 @@ public class PostDAO {
 		ArrayList<PostDTO> postList = new ArrayList<PostDTO>();
 		try{
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) MINUS (SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) ORDER BY postno DESC");
+			pstmt = con.prepareStatement("SELECT postno, postdate, userid, ptitle, pcontent, surl, stitle, sartist, salbum FROM (SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) MINUS (SELECT postno, postdate, userid, ptitle, pcontent, surl, stitle, sartist, salbum FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) ORDER BY postno DESC");
 			pstmt.setInt(1, pageNum*10);
 			pstmt.setInt(2, (pageNum - 1)*10);
 			rset = pstmt.executeQuery();
 			while (rset.next()) {
-				postList.add( new PostDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5)) );
+				postList.add( new PostDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5), rset.getString(6), rset.getString(7), rset.getString(8), rset.getString(9)) );
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,7 +86,7 @@ public class PostDAO {
 		boolean result = false;
 		try {
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) MINUS (SELECT postno, postdate, userid, ptitle, pcontent FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) ORDER BY postno DESC");
+			pstmt = con.prepareStatement("SELECT postno FROM (SELECT * FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) MINUS (SELECT postno FROM (SELECT * FROM post01 ORDER BY postno DESC) WHERE ROWNUM <= ?) ORDER BY postno DESC");
 			pstmt.setInt( 1, (pageNum + 1)*10);
 			pstmt.setInt( 2, (pageNum)*10);
 			rset = pstmt.executeQuery();
@@ -97,7 +101,7 @@ public class PostDAO {
 		return result;
 	}
 	
-	//작성자 id로 게시글 검색
+	//게시글 번호로 게시글 검색
 	public static PostDTO getPost(int postno) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -109,8 +113,30 @@ public class PostDAO {
 			pstmt.setInt(1, postno);
 			rset = pstmt.executeQuery();
 			if (rset.next()) {
+				post = new PostDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5), rset.getString(6), rset.getString(7), rset.getString(8), rset.getString(9));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, pstmt, rset);
+		}
+		return post;
+	}
+	
+	//게시글 번호로 게시글 검색
+	public static PostDTO getPost(String userid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		PostDTO post = null;
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("SELECT * FROM post01 WHERE userid = ?");
+			pstmt.setString(1, userid);
+			rset = pstmt.executeQuery();
+			if (rset.next()) {
 				post = new PostDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4),
-						rset.getString(5));
+						rset.getString(5), rset.getString(6), rset.getString(7), rset.getString(8), rset.getString(9));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -121,16 +147,39 @@ public class PostDAO {
 	}
 	
 	//글 수정
-	public static int update(int postno, String ptitle, String pcontent) {
+	public static int update(int postno, String ptitle, String pcontent, String surl, String stitle, String sartist, String salbum) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("UPDATE post01 SET ptitle = ?, pcontent = ? WHERE postno = ?");
+			pstmt = con.prepareStatement("UPDATE post01 SET ptitle = ?, pcontent = ?, surl = ?, stitle = ?, sartist = ?, salbum = ? WHERE postno = ?");
 			pstmt.setString(1, ptitle);
 			pstmt.setString(2, pcontent);
-			pstmt.setInt(3, postno);
+			pstmt.setString(3, surl);
+			pstmt.setString(4, stitle);
+			pstmt.setString(5, sartist);
+			pstmt.setString(6, salbum);
+			pstmt.setInt(7, postno);
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, pstmt);
+		}
+		return result;
+	}
+	
+	//탈퇴한 회원이 쓴 글 수정
+	public static int update(String userid, String newid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int result = 0;
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("UPDATE post01 SET userid = ? WHERE userid = ?");
+			pstmt.setString(1, newid);
+			pstmt.setString(2, userid);
 			result = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
