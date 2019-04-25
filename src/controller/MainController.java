@@ -98,8 +98,8 @@ public class MainController extends HttpServlet {
 	//정보 수정
 	private void userUpdate(HttpServletRequest request, HttpServletResponse response, HttpSession session, PrintWriter script) throws ServletException, IOException {
 		try {
-			if (UserDAO.userUpdate((String) session.getAttribute("userid"), request.getParameter("userpw"), request.getParameter("usernickname")) == 1) {
-				script.println("<script>location.href='userMyPage.jsp';</script>");
+			if (UserDAO.userUpdate((String) session.getAttribute("userid"), request.getParameter("usernickname")) == 1) {
+				script.println("<script>alert(\"수정되었습니다.\");location.href='userMyPage.jsp';</script>");
 			} else {
 				script.println("<script>alert(\"아이디를 불러오지 못했습니다.\");history.back();</script>");
 			}
@@ -187,7 +187,7 @@ public class MainController extends HttpServlet {
 				script.println("location.href = 'post.jsp'");
 				script.println("</script>");
 			} else {
-				if (request.getParameter("command") == "postUpdate") {
+				if (request.getParameter("command").equals("postUpdate")) {
 					if (PostDAO.update(postno, request.getParameter("ptitle"), request.getParameter("pcontent"),
 							request.getParameter("surl"), request.getParameter("stitle"),
 							request.getParameter("sartist"), request.getParameter("salbum")) == 1) {

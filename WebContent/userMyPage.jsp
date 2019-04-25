@@ -15,6 +15,9 @@
 <link rel="stylesheet" href="css/bootstrap.css">
 <title>buy main</title>
 <style type="text/css">
+th, td {
+	text-align: center;
+}
 </style>
 </head>
 <body>
@@ -70,14 +73,13 @@
 	</nav>
 
 	
-	<h4>마이페이지</h4>
+	<h4 align="center">마이페이지</h4>
 	<div class="container">
 		<div class="row">
 			<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
 				<thead>
 					<tr>
 						<th>아이디</th>
-						<th>비밀번호</th>
 						<th>닉네임</th>
 					</tr>
 				</thead>
@@ -87,13 +89,12 @@
 				<tbody>
 					<tr>
 						<td>${sessionScope.userid}</td>
-						<td><%=user.getUserpw()%></td>
 						<td><%=user.getUsernickname()%></td>
 					</tr>
 		
 					<tr>
-						<td colspan="4">
-							<a href="userUpdate.jsp">정보수정</a>&nbsp;&nbsp;&nbsp;
+						<td colspan="2">
+							<a href="userUpdate.jsp">닉네임 수정</a>&nbsp;&nbsp;&nbsp;
 							<a onclick="if(confirm('진짜 탈퇴하시겠습니까?'))location.href='maincon?command=userDelete&userid=${sessionScope.userid}';">회원탈퇴</a>&nbsp;&nbsp;&nbsp;
 							<a onclick="history.back()">취소</a>
 						</td>

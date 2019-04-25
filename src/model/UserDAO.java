@@ -105,16 +105,15 @@ public class UserDAO {
 	}
 	
 	//유저id로 정보 수정
-	public static int userUpdate(String userid, String userpw, String usernickname) throws SQLException {
+	public static int userUpdate(String userid, String usernickname) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("UPDATE user01 SET userpw = ?, usernickname = ? WHERE userid = ?");
-			pstmt.setString(1, userpw);
-			pstmt.setString(2, usernickname);
-			pstmt.setString(3, userid);
+			pstmt = con.prepareStatement("UPDATE user01 SET usernickname = ? WHERE userid = ?");
+			pstmt.setString(1, usernickname);
+			pstmt.setString(2, userid);
 			result = pstmt.executeUpdate();
 		} finally {
 			DBUtil.close(con, pstmt);

@@ -87,9 +87,6 @@ table .songlist {
 	<!-- 게시판 -->
 	<div class="container">
 		<div class="row">
-			<table class="table table-striped"
-				style="text-align: center; border: 1px solid #dddddd">
-				<tbody>
 					<%
 						ArrayList<PostDTO> list = PostDAO.getList(pageNum);
 						for (int i = 0; i < list.size(); i++) {
@@ -105,12 +102,15 @@ table .songlist {
 								userInfo = "탈퇴한 회원";
 							}
 					%>
+			<table class="table table-striped"
+				style="text-align: center; border: 1px solid #dddddd">
+				<tbody>
 					<tr>
-						<td><%=p.getPostno()%></td>
-						<td><strong><%=p.getPtitle()%></strong></td>
-						<td><%=userInfo%></td>
+						<td width='10%'><%=p.getPostno()%></td>
+						<td width='40%'><strong><%=p.getPtitle()%></strong></td>
+						<td width='30%'><%=userInfo%></td>
 						<td><%=p.getPostdate().substring(0, 11) + p.getPostdate().substring(11, 13)
-							+ " : " + p.getPostdate().substring(14, 16)%></td>
+							+ ":" + p.getPostdate().substring(14, 16)%></td>
 						<%
 							//글작성자 본인일시 수정 삭제 가능 
 							if ( userid != null && userid.equals(p.getUserid()) ) {
@@ -144,11 +144,11 @@ table .songlist {
 								<%=p.getPcontent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>")%>
 							</div>
 						</td>
+				</tbody>
+			</table>
 					<%
 						}
 					%>
-				</tbody>
-			</table>
 			
 			<!-- 페이지 넘기기 -->
 			<div>
@@ -193,12 +193,10 @@ table .songlist {
 				</ul>
 			</div>
 				
-			<!-- 회원만넘어가도록 -->
 			<%
-				//if logined userID라는 변수에 해당 아이디가 담기고 if not null
 				if (session.getAttribute("userid") != null) {
 			%>
-			<a href="postWrite.jsp?comm=write" class="btn btn-primary pull-right">글쓰기</a>
+			<a href="postWrite.jsp?command=write" class="btn btn-primary pull-right">글쓰기</a>
 			<%
 				} else {
 			%>

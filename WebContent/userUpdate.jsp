@@ -80,7 +80,6 @@ th, td {
 				<thead>
 					<tr>
 						<th>아이디</th>
-						<th>비밀번호</th>
 						<th>닉네임</th>
 					</tr>
 				</thead>
@@ -90,12 +89,11 @@ th, td {
 				<tbody>
 					<tr>
 						<td>${sessionScope.userid}</td>
-						<td><input type="password" name="userpw" value="<%= user.getUserpw() %>"></td>
 						<td><input type="text" name="usernickname" value="<%= user.getUsernickname() %>"></td>
 					</tr>
 
 					<tr>
-						<td colspan="4"><input type="submit" value="수정">
+						<td colspan="2"><input type="submit" value="수정">
 							&nbsp;&nbsp;&nbsp; <input type=button value="취소" OnClick="javascript:history.back(-1)">
 					</tr>
 				</tbody>
