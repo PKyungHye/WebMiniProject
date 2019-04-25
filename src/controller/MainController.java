@@ -69,14 +69,13 @@ public class MainController extends HttpServlet {
 	//회원가입
 	protected void join(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		
 		int result = UserDAO.join(request.getParameter("userid"), request.getParameter("userpw"), request.getParameter("usernickname"));
 		PrintWriter script = response.getWriter();
 		if (result == 1) {
 			session.setAttribute("userid", request.getParameter("userid"));
 			script.println("<script>location.href='main.jsp';</script>");
 		} else { // result == 0
-			script.println("<script>alert(\"이미 존재하는 아이디 입니다.\");history.back();</script>");
+			script.println("<script>alert(\"이미 가입된 아이디 입니다.\");history.back();</script>");
 		}
 	}
 	
