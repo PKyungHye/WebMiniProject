@@ -1,9 +1,8 @@
-package controller;
+package model;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +16,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 @WebServlet("/search")
-public class Search extends HttpServlet {
+public class SearchSong extends HttpServlet {
 	private static ArrayList<String> getList(Elements e) {
 		ArrayList<String> list = new ArrayList<>();
 		for (Element v : e) {
@@ -29,7 +28,6 @@ public class Search extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		//.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>")
 		String url = "https://music.bugs.co.kr/search/track?q=" + request.getParameter("searchWord");
 		Document search = Jsoup.connect(url).get();
 		ArrayList<String> titles = getList(search.select(".title[adult_yn]"));

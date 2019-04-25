@@ -55,6 +55,28 @@ public class PostDAO {
 		return result;
 	}
 	
+	//총 게시글 수 구하기
+	public static int getCount() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		int result = 0;
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("SELECT count(*) FROM post01");
+			rset = pstmt.executeQuery();
+
+			if (rset.next()) {
+				result = rset.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, pstmt);
+		}
+		return result;
+	}
+
 	//10개씩 목록 조회
 	public static ArrayList<PostDTO> getList(int pageNum) {
 		Connection con = null;

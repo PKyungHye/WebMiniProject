@@ -150,34 +150,30 @@ table .songlist {
 				</tbody>
 			</table>
 			
-			<div>
 			<!-- 페이지 넘기기 -->
+			<div>
 				<ul class="nav navbar-nav">
 				<%
-					int startNum = 1;
-					int lastNum = pageNum;
+					int startNum = pageNum - 2;
+					int endNum = pageNum + 2;
+					int lastPageNum = (PostDAO.getCount())/10 + 1;
 					
-					
-					if (PostDAO.nextPage(pageNum+1)) {
-						lastNum = pageNum + 2;
-					} else if (PostDAO.nextPage(pageNum))  {
-						lastNum = pageNum + 1;
+					if (startNum <= 0) {
+						startNum = 1;
+						endNum = 5;
 					}
 					
-					if (pageNum >= 3) {
-						startNum = pageNum - 2;
-					} else {
-						if (lastNum >= 5) {
-							lastNum = pageNum + (5 - pageNum);
-						}
+					if (pageNum >= lastPageNum - 2) {
+						startNum = lastPageNum - 4;
+						endNum = lastPageNum;
 					}
 					
 					if (pageNum != 1) {
 				%>
-						<li><a href="post.jsp?pageNum=<%=pageNum - 1%>">이전</a></li>
+						<li><a href="post.jsp?pageNum=1">처음으로</a></li>
 				<%
 					}
-					for (int i = startNum; i <= lastNum; i++) {
+					for (int i = startNum; i <= endNum; i++) {
 						if (i == pageNum) {
 				%>
 								<li><a href="post.jsp?pageNum=<%=i%>"><strong style="text-decoration: underline;"><big><%=i%></big></strong></a></li>
@@ -190,7 +186,7 @@ table .songlist {
 					}
 					if (PostDAO.nextPage(pageNum)) {
 				%>
-						<li><a href="post.jsp?pageNum=<%=pageNum + 1%>">다음</a></li>
+						<li><a href="post.jsp?pageNum=<%=lastPageNum%>">마지막으로</a></li>
 				<%
 					}
 				%>
