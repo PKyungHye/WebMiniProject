@@ -21,6 +21,9 @@
 	font-size: 10px;
 	color: red;
 }
+strong {
+	padding-left: 10px;
+}
 </style>
 </head>
 <body>
@@ -64,7 +67,7 @@
 	<div class="container">
 		<div class="col-lg-4"></div>
 
-		<div class="col-lg-4">
+		<div class="col-lg-4" style="width: 80%;">
 			<!-- 점보트론 -->
 			<div class="jumbotron" style="padding-top: 20px;">
 				<!-- 로그인 정보를 숨기면서 전송post -->
@@ -75,6 +78,7 @@
 					<!-- 아이디 -->
 					<div class="form-group">
 						<div>
+						<strong>아이디</strong>
 						<input type="text" class="form-control" placeholder="아이디"
 							name="userid" id="userid" maxlength="20" onkeyup="checkId()"
 							autocomplete="off">
@@ -86,6 +90,7 @@
 
 					<!-- 비밀번호 -->
 					<div class="form-group">
+						<strong>비밀번호</strong>
 						<input type="password" class="form-control" placeholder="비밀번호"
 							name="userpw" id="userpw" maxlength="16" onkeyup="checkPw()"
 							autocomplete="off">
@@ -96,6 +101,7 @@
 
 					<!-- 비밀번호 확인 -->
 					<div class="form-group">
+						<strong>비밀번호 확인</strong>
 						<input type="password" class="form-control" placeholder="비밀번호 확인"
 							id="userpw2" maxlength="16" onkeyup="checkPw2()" autocomplete="off">
 						<div class="conditions">
@@ -105,6 +111,7 @@
 					
 					<!-- 닉네임 -->
 					<div class="form-group">
+						<strong>닉네임</strong>
 						<input type="text" class="form-control" placeholder="닉네임"
 							name="usernickname" id="usernickname" maxlength="15"
 							onkeyup="checkNn()" autocomplete="off">

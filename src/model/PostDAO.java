@@ -4,16 +4,18 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.domain.PostDTO;
-import util.DBUtil;
+import model.util.DBUtil;
 
 public class PostDAO {
 	//글쓰기
-	public static int write(String userid, String ptitle, String pcontent, String surl, String stitle, String sartist, String salbum) {
+	public static int write(String userid, String ptitle, String pcontent, String surl, String stitle, String sartist, String salbum) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		int result = 0;
 		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("INSERT INTO post01 VALUES(post01_postno_seq.NEXTVAL, sysdate, ?, ?, ?, ?, ?, ?, ?)");
@@ -25,16 +27,15 @@ public class PostDAO {
 			pstmt.setString(6, sartist);
 			pstmt.setString(7, salbum);
 			
-			return pstmt.executeUpdate();
-		} catch (Exception e) {
-			return 0;
+			result = pstmt.executeUpdate();
 		} finally {
 			DBUtil.close(con,pstmt);
 		}
+		return result;
 	}
 	
 	//현재 마지막 게시글 번호 가져오기
-	public static int getPostno() {
+	public static int getPostno() throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -47,8 +48,8 @@ public class PostDAO {
 			if(rset.next()) {
 				result = rset.getInt(1);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
 		} finally {
 			DBUtil.close(con,pstmt);
 		}
@@ -56,7 +57,7 @@ public class PostDAO {
 	}
 	
 	//총 게시글 수 구하기
-	public static int getCount() {
+	public static int getCount() throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -69,8 +70,8 @@ public class PostDAO {
 			if (rset.next()) {
 				result = rset.getInt(1);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
 		} finally {
 			DBUtil.close(con, pstmt);
 		}
@@ -78,7 +79,7 @@ public class PostDAO {
 	}
 
 	//10개씩 목록 조회
-	public static ArrayList<PostDTO> getList(int pageNum) {
+	public static ArrayList<PostDTO> getList(int pageNum) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -92,8 +93,8 @@ public class PostDAO {
 			while (rset.next()) {
 				postList.add( new PostDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5), rset.getString(6), rset.getString(7), rset.getString(8), rset.getString(9)) );
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
 		} finally{
 			DBUtil.close(con, pstmt, rset);
 		}
@@ -101,7 +102,7 @@ public class PostDAO {
 	}
 	
 	//10 단위 페이징 처리를 위한 함수
-	public static boolean nextPage(int pageNum) {
+	public static boolean nextPage(int pageNum) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -115,8 +116,8 @@ public class PostDAO {
 			if (rset.next()) {
 				result = true;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
 		} finally {
 			DBUtil.close(con, pstmt, rset);
 		}
@@ -124,7 +125,7 @@ public class PostDAO {
 	}
 	
 	//게시글 번호로 게시글 검색
-	public static PostDTO getPost(int postno) {
+	public static PostDTO getPost(int postno) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -137,8 +138,8 @@ public class PostDAO {
 			if (rset.next()) {
 				post = new PostDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5), rset.getString(6), rset.getString(7), rset.getString(8), rset.getString(9));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
 		} finally {
 			DBUtil.close(con, pstmt, rset);
 		}
@@ -146,7 +147,7 @@ public class PostDAO {
 	}
 	
 	//게시글 번호로 게시글 검색
-	public static PostDTO getPost(String userid) {
+	public static PostDTO getPost(String userid) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -160,8 +161,8 @@ public class PostDAO {
 				post = new PostDTO(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4),
 						rset.getString(5), rset.getString(6), rset.getString(7), rset.getString(8), rset.getString(9));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
 		} finally {
 			DBUtil.close(con, pstmt, rset);
 		}
@@ -169,7 +170,7 @@ public class PostDAO {
 	}
 	
 	//글 수정
-	public static int update(int postno, String ptitle, String pcontent, String surl, String stitle, String sartist, String salbum) {
+	public static int update(int postno, String ptitle, String pcontent, String surl, String stitle, String sartist, String salbum) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -184,8 +185,8 @@ public class PostDAO {
 			pstmt.setString(6, salbum);
 			pstmt.setInt(7, postno);
 			result = pstmt.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
 		} finally {
 			DBUtil.close(con, pstmt);
 		}
@@ -193,7 +194,7 @@ public class PostDAO {
 	}
 	
 	//탈퇴한 회원이 쓴 글 수정
-	public static int update(String userid, String newid) {
+	public static int update(String userid, String newid) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -203,8 +204,8 @@ public class PostDAO {
 			pstmt.setString(1, newid);
 			pstmt.setString(2, userid);
 			result = pstmt.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
 		} finally {
 			DBUtil.close(con, pstmt);
 		}
@@ -212,7 +213,7 @@ public class PostDAO {
 	}
 	
 	//글 삭제
-	public static int delete(int postno) {
+	public static int delete(int postno) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -221,8 +222,10 @@ public class PostDAO {
 			pstmt = con.prepareStatement("DELETE FROM post01 WHERE postno = ?");
 			pstmt.setInt(1, postno);
 			result = pstmt.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+		} finally {
+			DBUtil.close(con, pstmt);
 		}
 		return result;
 	}

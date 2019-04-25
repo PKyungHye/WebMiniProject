@@ -20,8 +20,9 @@ td {
 	border-bottom: 1px solid #ddd;
 }
 .table_container {
-	width: 32%;
+	width: 31%;
 	float: left;
+	padding-left: 1%;
 	padding-right: 1%;
 }
 </style>
@@ -85,9 +86,7 @@ td {
 	<script src="js/bootstrap.js"></script>
 
 	<div class="container">
-		<div class="col-lg-4"></div>
-
-		<div class="col-lg-4">
+		<div class="col-lg-4" style="width: 80%;">
 			<div class="jumbotron" style="padding-top: 20px;">
 				<h4 style="text-align: center;">이용권 비교</h4>
 				사이트: 
@@ -107,8 +106,8 @@ td {
 		</div>
 	</div>
 	
-	<div align="center">
-		<div class="table_container" id="viewGenie" style="display: none;">
+	<div align="center" style="width: 100%;">
+		<div align="center" class="table_container" id="viewGenie" style="display: none;">
 			<table class="table">
 				<caption>Genie</caption>
 				<tr><th>이용권</th><th>가격</th></tr>
@@ -121,7 +120,7 @@ td {
 				</a>
 			</p>
 		</div>
-		<div class="table_container" id="viewBugs" style="display: none;">
+		<div align="center" class="table_container" id="viewBugs" style="display: none;">
 			<table class="table">
 				<caption>Bugs</caption>
 				<tr><th>이용권</th><th colspan="2">가격</th></tr>
@@ -134,7 +133,7 @@ td {
 				</a>
 			</p>
 		</div>
-		<div class="table_container" id="viewMelon" style="display: none;">
+		<div align="center" class="table_container" id="viewMelon" style="display: none;">
 			<table class="table">
 				<caption>Melon</caption>
 				<tr><th>이용권</th><th colspan="2">가격</th></tr>
@@ -155,8 +154,14 @@ td {
 		    function f1(item) {
 		    	if (document.getElementById("checkAll").checked) {
 		    		item.checked = true;
+		    		g = 1;
+		    		b = 1;
+		    		m = 1;
 		        } else {
 		        	item.checked = false;
+		    		g = 0;
+		    		b = 0;
+		    		m = 0;
 		        }
 		    }
 		}
@@ -165,6 +170,17 @@ td {
 		function offCheckAll() {
 			count = 0;
 			document.getElementsByName("sites").forEach(f1);
+			
+			if (document.getElementById("genie").checked) {
+	        	g = 1;
+	        }
+	        if (document.getElementById("bugs").checked) {
+	        	b = 1;
+	        }
+	        if (document.getElementById("melon").checked) {
+	        	m = 1;
+	        }	
+			
 		    function f1(item) {
 		    	if (item.checked) {
 		    		count += 1;
@@ -188,7 +204,8 @@ td {
 			
 			return str;
 		}
-	
+
+    	var g = 0, b = 0, m = 0;
 		function loadDoc() {
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
@@ -202,7 +219,7 @@ td {
 						var trGenie = "";
 						var trBugs = "";
 						var trMelon = "";
-						
+
 						if (document.getElementById("genie").checked) {
 							listGenie = JSON.parse(this.responseText).genie;
 							viewTr = "";
@@ -268,9 +285,10 @@ td {
 					} else {
 						alert("가격을 다시 입력하세요.");
 					}
+
 			    }
 			};
-			xhttp.open("GET", "buycon", true);
+			xhttp.open("GET", "maincon?command=buy&genie=" + g + "&bugs=" + b + "&melon=" + m, true);
 			xhttp.send();
 		}
 	</script>

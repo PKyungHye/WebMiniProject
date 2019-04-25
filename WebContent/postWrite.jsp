@@ -104,7 +104,7 @@ table .songlist {
 			<form method="post" action="maincon">
 				
 				<%
-				if (request.getParameter("comm").equals("write")) {
+				if (request.getParameter("command").equals("write")) {
 				%>
 					<input type="hidden" name="command" value="postWrite">
 					<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">
@@ -267,7 +267,7 @@ table .songlist {
 			    	}
 			    }
 			};
-			xhttp.open("GET", "search?searchWord=" + document.getElementById('searchBar2').value, true);
+			xhttp.open("GET", "maincon?command=search&searchWord=" + document.getElementById('searchBar2').value, true);
 			xhttp.send();
 		}
 		

@@ -12,6 +12,11 @@
 <!-- 스타일시트 참조  -->
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <title>jsp 게시판 웹사이트</title>
+<style>
+strong {
+	padding-left: 10px;
+}
+</style>
 </head>
 <body>
 
@@ -51,22 +56,20 @@
 
 	<!-- 로긴폼 -->
 	<div class="container">
-		<div class="col-lg-4"></div>
-		<div class="col-lg-4">
-			<!-- 점보트론 -->
+		<div class="col-lg-4" style="width: 80%;">
 			<div class="jumbotron" style="padding-top: 20px;">
-			
-				<!-- 로그인 정보를 숨기면서 전송post -->
 				<form method="post" action="maincon">
 					<input type="hidden" name="command" value="login">
 					<h3 style="text-align: center;">로그인화면</h3>
 
 					<div class="form-group">
+						<strong>아이디</strong>
 						<input type="text" class="form-control" placeholder="아이디"
 							name="userid" maxlength="20" required>
 					</div>
 					
 					<div class="form-group">
+						<strong>비밀번호</strong>
 						<input type="password" class="form-control" placeholder="비밀번호"
 							name="userpw" maxlength="20" required>
 					</div>
@@ -85,8 +88,5 @@
 	<!-- 부트스트랩 JS  -->
 	<script src="js/bootstrap.js"></script>
 
-
-
 </body>
-
 </html>

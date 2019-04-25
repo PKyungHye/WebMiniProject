@@ -116,7 +116,7 @@ table .songlist {
 							if ( userid != null && userid.equals(p.getUserid()) ) {
 						%>
 						<td>
-							<a onclick="if(confirm('수정할까요?'))location.href='postWrite.jsp?comm=update&postno=<%=p.getPostno()%>';">수정</a>
+							<a onclick="if(confirm('수정할까요?'))location.href='postWrite.jsp?command=update&postno=<%=p.getPostno()%>';">수정</a>
 							<a onclick="if(confirm('삭제할까요?'))location.href='maincon?command=postDelete&postno=<%=p.getPostno()%>';">삭제</a>
 						</td>
 						<%
